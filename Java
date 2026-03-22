@@ -1,1 +1,124 @@
+import java.util.Scanner;
+
+public class SimpleBankApp {
+
+    static int[] accountNumbers = new int[50];
+    static String[] accountNames = new String[50];
+    static double[] accountBalances = new double[50];
+    static int totalAccounts = 0;
+
+    public static void main(String[] args) {
+
+        Scanner input = new Scanner(System.in);
+        int option;
+
+        do {
+            System.out.println("\n=== BANK SYSTEM ===");
+            System.out.println("1. Open New Account");
+            System.out.println("2. Add Money");
+            System.out.println("3. Withdraw Money");
+            System.out.println("4. View Balance");
+            System.out.println("5. Exit");
+            System.out.print("Choose option: ");
+
+            option = input.nextInt();
+
+            if (option == 1) {
+                openAccount(input);
+            } else if (option == 2) {
+                addMoney(input);
+            } else if (option == 3) {
+                takeMoney(input);
+            } else if (option == 4) {
+                showBalance(input);
+            } else if (option == 5) {
+                System.out.println("Exiting... धन्यवाद!");
+            } else {
+                System.out.println("Invalid choice!");
+            }
+
+        } while (option != 5);
+
+        input.close();
+    }
+
+    static void openAccount(Scanner input) {
+        System.out.print("Enter new Account Number: ");
+        accountNumbers[totalAccounts] = input.nextInt();
+        input.nextLine();
+
+        System.out.print("Enter Account Holder Name: ");
+        accountNames[totalAccounts] = input.nextLine();
+
+        accountBalances[totalAccounts] = 0.0;
+        totalAccounts++;
+
+        System.out.println("New account created successfully!");
+    }
+
+    static int searchAccount(int accNo) {
+        for (int i = 0; i < totalAccounts; i++) {
+            if (accountNumbers[i] == accNo) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static void addMoney(Scanner input) {
+        System.out.print("Enter Account Number: ");
+        int accNo = input.nextInt();
+
+        int pos = searchAccount(accNo);
+
+        if (pos >= 0) {
+            System.out.print("Enter amount to add: ");
+            double amt = input.nextDouble();
+
+            if (amt > 0) {
+                accountBalances[pos] += amt;
+                System.out.println("Money added successfully!");
+            } else {
+                System.out.println("Enter valid amount!");
+            }
+        } else {
+            System.out.println("Account does not exist!");
+        }
+    }
+
+    static void takeMoney(Scanner input) {
+        System.out.print("Enter Account Number: ");
+        int accNo = input.nextInt();
+
+        int pos = searchAccount(accNo);
+
+        if (pos >= 0) {
+            System.out.print("Enter amount to withdraw: ");
+            double amt = input.nextDouble();
+
+            if (amt > 0 && amt <= accountBalances[pos]) {
+                accountBalances[pos] -= amt;
+                System.out.println("Withdrawal done successfully!");
+            } else {
+                System.out.println("Invalid amount or insufficient balance!");
+            }
+        } else {
+            System.out.println("Account not found!");
+        }
+    }
+
+    static void showBalance(Scanner input) {
+        System.out.print("Enter Account Number: ");
+        int accNo = input.nextInt();
+
+        int pos = searchAccount(accNo);
+
+        if (pos >= 0) {
+            System.out.println("Account Holder: " + accountNames[pos]);
+            System.out.println("Available Balance: " + accountBalances[pos]);
+        } else {
+            System.out.println("Account not found!");
+        }
+    }
+}
 
